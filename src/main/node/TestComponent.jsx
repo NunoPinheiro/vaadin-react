@@ -1,4 +1,5 @@
 var React = require("react");
+
 export var TestComponent = React.createClass({
   propTypes: {
    name : React.PropTypes.string.isRequired,
@@ -12,7 +13,7 @@ export var TestComponent = React.createClass({
               <h1>Hello, {this.state.name}</h1>
               Change Name :
               <input type="text" onChange={this.nameChanged} />
-              <button onClick={this.triggerNameChangeEvent}></button>
+              <button onClick={this.triggerNameChangeEvent}>Click to change name on server</button>
            </div>;
   },
   nameChanged : function(e){

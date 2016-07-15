@@ -5,3 +5,5 @@ target/
 node_modules/
 generated/
 .classpath
+src/main/node/*.js
+bin/

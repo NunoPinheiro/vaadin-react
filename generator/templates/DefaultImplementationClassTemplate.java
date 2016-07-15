@@ -10,7 +10,7 @@ import com.vaadin.annotations.JavaScript;
   If you are using vaadin embedded in a page, you may also opt to add the resources to the external page, so when vaadin needs to load the components they are already present.
   In that case, instead of this component, you should create a new class which inherits from {{ name }}_Base and use it instead
 **/
-@JavaScript({"{{name}}Connector.js", "react.min.js", "react-dom.min.js", "{{name}}.js"})
+@JavaScript({"{{name}}Connector.js"})
 public class {{ name }}Impl extends {{name}}_Base{
   public {{ name }}Impl({{requiredArgList}}){
     super({{requiredArgListCall}});

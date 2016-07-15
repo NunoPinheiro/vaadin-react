@@ -17,7 +17,11 @@ function listFiles(path){
     }
     return files
   }else{
-    return [path]
+    if(path.endsWith(".js")){
+      return [path]
+    }else{
+      return []
+    }
   }
 }
 
@@ -60,11 +64,12 @@ function processFile(file){
 
   var view = {
       name : componentName,
-      props : processedProps,
       requiredProps : requiredProps,
+      props : processedProps,
       requiredArgList : requiredArgList,
       requiredArgListCall : requiredArgListCall,
-      package : configuration.package
+      package : configuration.package,
+      file : process.cwd() + "/" + file
   };
   var renderedBase = Mustache.render(baseClassTemplate, view);
   var renderedImpl = Mustache.render(defaultImplClassTemplate, view);
@@ -77,9 +82,17 @@ function processFile(file){
   mkdirs(resourcesDir);
   fs.writeFileSync(javaDir +  componentName + "_Base.java", renderedBase, 'utf8');
   fs.writeFileSync(javaDir +  componentName + "Impl.java", renderedImpl, 'utf8');
-  fs.writeFileSync(resourcesDir +  componentName + "Connector.js", renderedConnector, 'utf8');
-  //console.log(rendered)
-  //console.log(renderedImpl)
+
+  var connectorPath = resourcesDir +  componentName + "SimpleConnector.js";
+  fs.writeFileSync(connectorPath, renderedConnector, 'utf8');
+
+  //export browserified connector
+  var browserify = require('browserify');
+  var b = browserify();
+  b.add(connectorPath);
+  b.bundle().pipe(fs.createWriteStream(resourcesDir +  componentName + "Connector.js"));
+
+  //We save the original simple connector and the browserified connector so the user can decide which to use in case he wants to optimize his "widgetset"
 }
 
 function getPackageAsPath(package){
@@ -94,9 +107,6 @@ function getComponentName(file){
   var nameInit = file.lastIndexOf("/") + 1
   file = file.substring(nameInit)
   var fileTypeIndex = file.indexOf(".js")
-  if(fileTypeIndex < 0){
-    fileTypeIndex = file.indexOf(".jsx")
-  }
   return file.substring(0, fileTypeIndex)
 }
 

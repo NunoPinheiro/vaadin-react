@@ -13,6 +13,6 @@
     "browserify": ""
   },
   "scripts": {
-    "compile": "babel src/main/node --out-dir .compiled; browserify .compiled/TestComponent.js > src/main/resources/com/nunopinheiro/vaadin_react/generated/TestComponent.js; cp node_modules/react-dom/dist/react-dom.min.js src/main/resources/com/nunopinheiro/vaadin_react/generated/; cp node_modules/react/dist/react.min.js src/main/resources/com/nunopinheiro/vaadin_react/generated/"
+    "compile": "babel src/main/node --out-dir src/main/node;"
   }
 }

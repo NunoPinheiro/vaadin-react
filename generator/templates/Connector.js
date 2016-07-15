@@ -1,4 +1,8 @@
 //We need to calculate the vaadin client side name of the package wich we do by replacing '.' by '_'
+var ReactDOM = require("react-dom");
+var React = require("react");
+var {{name}} = require("{{& file}}").{{name}};
+
 var package = "{{package}}";
 while(package.indexOf(".") > 0){
   package = package.replace(".", "_");
