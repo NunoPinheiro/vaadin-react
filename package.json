@@ -1,18 +1,13 @@
 {
   "name": "react-vaadin",
   "dependencies": {
-    "react": "",
-    "react-dom": ""
-  },
-  "devDependencies": {
-    "babel-preset-react": "",
-    "babel-preset-es2015": "",
-    "babel-cli": "",
     "mustache": "^2.2.1",
     "react-docgen": "",
     "browserify": ""
   },
   "scripts": {
     "compile": "babel src/main/node --out-dir src/main/node;"
-  }
+  },
+  "version" : "0.0.1",
+  "bin" : "generator/generator.js"
 }

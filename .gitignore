@@ -1,9 +1,8 @@
 target/
-.compiled/
 .project
 .settings/
 node_modules/
 generated/
 .classpath
-src/main/node/*.js
+*/src/main/node/*.js
 bin/

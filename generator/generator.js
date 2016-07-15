@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var fs = require('fs');
 var configuration = JSON.parse(fs.readFileSync('.react-vaadin.config', 'utf8'));
 var reactDocs = require('react-docgen');
