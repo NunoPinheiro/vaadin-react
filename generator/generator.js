@@ -38,9 +38,10 @@ for(var file in files){
 }
 
 function processFile(file){
-  var componentName = getComponentName(file);
+
   var src = fs.readFileSync(file)
   var componentInfo = reactDocs.parse(src);
+  var componentName = componentInfo.displayName || getComponentName(file);
   var processedProps = []
   var requiredProps = []
   var requiredArgList = ""
@@ -116,9 +117,12 @@ function toJavaType(type){
   switch(type) {
     case "string":
       return "String";
-    default:
+    case "func":
       //JavascriptFunction is a special type generated to enable handling client side events on the server
-      return "JavaScriptFunction"
+      return "JavaScriptFunction";
+    default:
+      //TODO this default should be temporary until all the cases are supported
+      return "String"
   }
 }
 

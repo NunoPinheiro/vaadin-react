@@ -1,7 +1,10 @@
 //We need to calculate the vaadin client side name of the package wich we do by replacing '.' by '_'
 var ReactDOM = require("react-dom");
 var React = require("react");
-var {{name}} = require("{{& file}}").{{name}};
+var module = require("{{& file}}");
+
+// The module can be exported either by its name or as the default export
+var {{name}} = module.{{name}} || module;
 
 var package = "{{package}}";
 while(package.indexOf(".") > 0){
@@ -9,18 +12,26 @@ while(package.indexOf(".") > 0){
 }
 
 var connectorName = package + "_" + "{{name}}Impl";
-console.log(connectorName)
+
 window[connectorName] = function() {
       var Component = React.createFactory({{name}});
 
-
       this.onStateChange = function() {
-      	//add the rpc call to the component properties
+
+        var props = {};
+        //add the rpc call to the component properties
         {{#props}}
       		{{#isFunction}}
-            this.getState().onNameChange = this.{{name}}Handler
+            props.{{name}} = this.{{name}}Handler
           {{/isFunction}}
         {{/props}}
-        ReactDOM.render( Component(this.getState()), this.getElement());
+        //add the non function elements
+        {{#props}}
+          {{^isFunction}}
+            props.{{name}} = this.getState().{{name}}
+          {{/isFunction}}
+        {{/props}}
+
+        ReactDOM.render( Component(props), this.getElement());
     }
 };

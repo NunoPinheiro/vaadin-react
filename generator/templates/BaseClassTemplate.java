@@ -12,11 +12,6 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 		{{#requiredProps}}
 			set{{upperName}}({{name}});
 		{{/requiredProps}}
-		{{#props}}
-			{{#isFunction}}
-				addFunction("{{name}}Handler", this::handle{{upperName}});
-			{{/isFunction}}
-		{{/props}}
 
 	}
 
@@ -53,6 +48,9 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 
 			public void set{{upperName}}({{ type }} {{name}}){
 				this.{{name}} = {{name}};
+				if({{name}} != null){
+					addFunction("{{name}}Handler", this::handle{{upperName}});
+				}
 			}
 		{{/isFunction}}
 	{{/props}}
