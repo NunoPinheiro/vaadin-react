@@ -1,0 +1,8 @@
+{
+  "name": "react-vaadin-third-party-sample",
+  "dependencies": {
+    "react": "",
+    "react-dom": "",
+    "react-markdown": "^2.4.2"
+  }
+}
