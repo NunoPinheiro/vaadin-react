@@ -4,3 +4,4 @@ target/
 .settings/
 node_modules/
 generated/
+.classpath

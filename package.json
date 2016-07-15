@@ -1,14 +1,16 @@
 {
   "name": "react-vaadin",
   "dependencies": {
+    "react": "",
+    "react-dom": ""
   },
-  "devDependencies":{
-    "babel-preset-react" : "",
-    "babel-preset-es2015" : "",
-    "babel-cli" : "",
-    "react" : "",
-    "react-dom" : "",
-    "browserify" : ""
+  "devDependencies": {
+    "babel-preset-react": "",
+    "babel-preset-es2015": "",
+    "babel-cli": "",
+    "mustache": "^2.2.1",
+    "react-docgen": "",
+    "browserify": ""
   },
   "scripts": {
     "compile": "babel src/main/node --out-dir .compiled; browserify .compiled/TestComponent.js > src/main/resources/com/nunopinheiro/vaadin_react/generated/TestComponent.js; cp node_modules/react-dom/dist/react-dom.min.js src/main/resources/com/nunopinheiro/vaadin_react/generated/; cp node_modules/react/dist/react.min.js src/main/resources/com/nunopinheiro/vaadin_react/generated/"

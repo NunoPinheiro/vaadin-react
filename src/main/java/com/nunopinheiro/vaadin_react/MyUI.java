@@ -13,6 +13,9 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+import elemental.js.json.JsJsonArray;
+import elemental.json.JsonArray;
+
 /**
  * This UI is the application entry point. A UI may either represent a browser
  * window (or tab) or some part of a html page where a Vaadin application is
@@ -30,13 +33,17 @@ public class MyUI extends UI {
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 		
-		layout.addComponent(new TestComponent("Nuno"));
+		layout.addComponent(new TestComponentImpl("Nuno", this::handle));
 		layout.setMargin(true);
 		layout.setSpacing(true);
 
 		setContent(layout);
 	}
 
+	private void handle(JsonArray args){
+		System.out.println("name changed to " + args.getString(0));
+	}
+	
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
 	@VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
 	public static class MyUIServlet extends VaadinServlet {

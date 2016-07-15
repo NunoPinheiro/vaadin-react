@@ -1,5 +1,9 @@
 var React = require("react");
-var TestComponent = React.createClass({
+export var TestComponent = React.createClass({
+  propTypes: {
+   name : React.PropTypes.string.isRequired,
+   onNameChange : React.PropTypes.func.isRequired
+  },
   getInitialState : function(){
     return {"name" : this.props.name}
   },
@@ -21,7 +25,9 @@ var TestComponent = React.createClass({
   }
 });
 
-export default TestComponent;
+
 
 //HACK to enable view in browser
-window.TestComponent = TestComponent;
+if(typeof window != "undefined"){
+  window.TestComponent = TestComponent;
+}
