@@ -48,7 +48,7 @@ function processFile(file){
 
   for(var prop in componentInfo.props){
     var type = toJavaType(componentInfo.props[prop].type.name)
-    var isFunction = type == "JavascriptFunction"
+    var isFunction = type == "JavaScriptFunction"
     var upperName = prop[0].toUpperCase() + prop.substring(1)
     var processedProp = { name : prop, upperName : upperName, type : type, isFunction : isFunction }
     processedProps.push(processedProp)
@@ -118,7 +118,7 @@ function toJavaType(type){
       return "String";
     default:
       //JavascriptFunction is a special type generated to enable handling client side events on the server
-      return "JavascriptFunction"
+      return "JavaScriptFunction"
   }
 }
 

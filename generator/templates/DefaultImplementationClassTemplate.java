@@ -1,6 +1,7 @@
 package {{package}};
 
 import com.vaadin.annotations.JavaScript;
+import com.vaadin.ui.JavaScriptFunction;
 
 /**
   This is the default generated class, you can directly use this class to instantiate your component

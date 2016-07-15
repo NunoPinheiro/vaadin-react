@@ -5,7 +5,7 @@ import com.vaadin.shared.ui.JavaScriptComponentState;
 import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
 
-public class {{ name }}_Base extends AbstractJavaScriptComponent{
+abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 
 	public {{ name }}_Base({{requiredArgList}}){
 		//initialize required properties from constructor
@@ -73,12 +73,5 @@ public class {{ name }}_Base extends AbstractJavaScriptComponent{
 				}
 			{{/isFunction}}
 		{{/props}}
-	}
-
-	// For now we are avoiding an external library,
-	// so we will generate a simple interface for each generated component to enable the function handlers
-
-	public interface JavascriptFunction{
-		public void call(JsonArray args);
 	}
 }
