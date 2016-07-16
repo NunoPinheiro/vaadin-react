@@ -1,5 +1,5 @@
 {
-  "name": "react-vaadin",
+  "name": "vaadin-react",
   "dependencies": {
     "mustache": "^2.2.1",
     "react-docgen": "",
@@ -9,5 +9,10 @@
     "compile": "babel src/main/node --out-dir src/main/node;"
   },
   "version" : "0.0.1",
-  "bin" : "generator/generator.js"
+  "bin" : "generator/generator.js",
+  "repository" :{
+    "type" : "git",
+    "url" : "https://github.com/NunoPinheiro/vaadin-react"
+  }
+
 }
