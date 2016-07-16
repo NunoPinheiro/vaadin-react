@@ -22,13 +22,18 @@ window[connectorName] = function() {
         //add the rpc call to the component properties
         {{#props}}
       		{{#isFunction}}
-            props.{{name}} = this.{{name}}Handler
+            props.{{name}} = this.{{name}}Handler;
           {{/isFunction}}
         {{/props}}
         //add the non function elements
         {{#props}}
           {{^isFunction}}
-            props.{{name}} = this.getState().{{name}}
+            {{^isSymbol}}
+              props.{{name}} = this.getState().{{name}};
+            {{/isSymbol}}
+            {{#isSymbol}}
+              props.{{name}} = Symbol(this.getState().{{name}});
+            {{/isSymbol}}
           {{/isFunction}}
         {{/props}}
 

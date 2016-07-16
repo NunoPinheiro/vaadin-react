@@ -48,10 +48,9 @@ function processFile(file){
   var requiredArgListCall = ""
 
   for(var prop in componentInfo.props){
-    var type = toJavaType(componentInfo.props[prop].type.name)
-    var isFunction = type == "JavaScriptFunction"
     var upperName = prop[0].toUpperCase() + prop.substring(1)
-    var processedProp = { name : prop, upperName : upperName, type : type, isFunction : isFunction }
+    var processedProp = { name : prop, upperName : upperName}
+    addJavaType(processedProp, componentInfo.props[prop].type.name)
     processedProps.push(processedProp)
     if(componentInfo.props[prop].required){
       //Create arguments string for the constructor, we are doing it here because it would be uglier in mustache
@@ -59,7 +58,7 @@ function processFile(file){
         requiredArgList += ", ";
         requiredArgListCall += ", ";
       }
-      requiredArgList += `${type} ${prop}`
+      requiredArgList += `${processedProp.type} ${prop}`
       requiredArgListCall += `${prop}`
       requiredProps.push(processedProp)
     }
@@ -113,16 +112,46 @@ function getComponentName(file){
   return file.substring(0, fileTypeIndex)
 }
 
-function toJavaType(type){
+function addJavaType(properties, type){
+  // The existing React types can be seen in the official documentation:
+  // https://facebook.github.io/react/docs/reusable-components.html
   switch(type) {
     case "string":
-      return "String";
+      properties.type = "String";
+      break;
+    case "number":
+      properties.type = "double";
+      break;
+    case "bool":
+      properties.type = "boolean";
+      break;
     case "func":
-      //JavascriptFunction is a special type generated to enable handling client side events on the server
-      return "JavaScriptFunction";
+      //JavascriptFunction is a special vaadin type which enable handling client-side events on the server
+      properties.type = "JavaScriptFunction";
+      properties.isFunction = true;
+      break;
+    case "object":
+      properties.type = "elemental.json.JsonObject";
+      break;
+    case "array":
+      properties.type = "elemental.json.JsonArray";
+      break;
+    case "symbol":
+      //The type used on the server-side will be String, but it will be transformed into a Symbol on the client-side
+      properties.type = "String";
+      properties.isSymbol = true;
+      break;
+    //These validation types are still unsupported
+    case "node":
+    case "element":
+    case "instanceOf":
+    case "enum":
+    case "union":
+    case "arrayOf":
+    case "custom":
+    case "shape":
     default:
-      //TODO this default should be temporary until all the cases are supported
-      return "String"
+      throw "Unsupported type: " + type
   }
 }
 
