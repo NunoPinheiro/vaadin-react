@@ -8,7 +8,7 @@
   "scripts": {
     "compile": "babel src/main/node --out-dir src/main/node;"
   },
-  "version" : "0.0.1",
+  "version" : "0.0.2",
   "bin" : "generator/generator.js",
   "repository" :{
     "type" : "git",
