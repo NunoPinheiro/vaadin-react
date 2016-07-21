@@ -95,6 +95,12 @@ function processFile(file){
   b.bundle().pipe(fs.createWriteStream(resourcesDir +  componentName + "Connector.js"));
 
   //We save the original simple connector and the browserified connector so the user can decide which to use in case he wants to optimize his "widgetset"
+
+
+  //Copy the lib to the target folder - we are avoiding a maven distribution for now
+  var libPackageFolder = "target/generated-sources/vaadin-react/com/nunopinheiro/vaadin_react";
+  mkdirs(libPackageFolder);
+  fs.createReadStream(__dirname + "/lib/ReactComponent.java", "utf8").pipe(fs.createWriteStream(libPackageFolder + "/ReactComponent.java"));
 }
 
 function getPackageAsPath(package){
@@ -141,9 +147,12 @@ function addJavaType(properties, type){
       properties.type = "String";
       properties.isSymbol = true;
       break;
+    case "element":
+      properties.type = "com.nunopinheiro.vaadin_react.ReactComponent";
+      properties.isElement = true;
+      break;
     //These validation types are still unsupported
     case "node":
-    case "element":
     case "instanceOf":
     case "enum":
     case "union":

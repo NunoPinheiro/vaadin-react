@@ -12,31 +12,44 @@ while(package.indexOf(".") > 0){
 }
 
 var connectorName = package + "_" + "{{name}}Impl";
+var renderFunction = "$vaadinReact{{name}}Render";
 
 window[connectorName] = function() {
-      var Component = React.createFactory({{name}});
-
       this.onStateChange = function() {
-
-        var props = {};
-        //add the rpc call to the component properties
-        {{#props}}
-      		{{#isFunction}}
-            props.{{name}} = this.{{name}}Handler;
-          {{/isFunction}}
-        {{/props}}
-        //add the non function elements
-        {{#props}}
-          {{^isFunction}}
-            {{^isSymbol}}
-              props.{{name}} = this.getState().{{name}};
-            {{/isSymbol}}
-            {{#isSymbol}}
-              props.{{name}} = Symbol(this.getState().{{name}});
-            {{/isSymbol}}
-          {{/isFunction}}
-        {{/props}}
-
-        ReactDOM.render( Component(props), this.getElement());
+        var component = window[renderFunction](this.getState());
+        ReactDOM.render(component, this.getElement());
     }
 };
+
+//The component can be rendered either from a top level (as a vaadin component), or within another vaadin component
+window[renderFunction] = function(state) {
+  var Component = React.createFactory({{name}});
+  var props = {};
+  //add the rpc call to the component properties
+  {{#props}}
+    {{#isFunction}}
+      props.{{name}} = this.{{name}}Handler;
+    {{/isFunction}}
+  {{/props}}
+  //add the non function elements
+  {{#props}}
+    {{^isFunction}}
+      {{^isSymbol}}
+      {{^isElement}}
+        props.{{name}} = state.{{name}};
+      {{/isElement}}
+      {{/isSymbol}}
+      {{#isSymbol}}
+        props.{{name}} = Symbol(state.{{name}});
+      {{/isSymbol}}
+      {{#isElement}}
+        if(state.{{name}}ComponentType){
+          //Render an inner component
+          var componentRenderer = window["$vaadinReact" + state.{{name}}ComponentType + "Render"];
+          props.{{name}} = componentRenderer(state.{{name}});
+        }
+      {{/isElement}}
+    {{/isFunction}}
+  {{/props}}
+  return Component(props);
+}

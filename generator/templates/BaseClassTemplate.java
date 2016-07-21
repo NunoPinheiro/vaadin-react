@@ -4,8 +4,13 @@ import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.shared.ui.JavaScriptComponentState;
 import com.vaadin.ui.JavaScriptFunction;
 import elemental.json.JsonArray;
+import com.nunopinheiro.vaadin_react.ReactComponent;
 
-abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
+abstract public class {{ name }}_Base extends ReactComponent{
+	@Override
+	public String getComponentType(){
+		return "{{name}}";
+	}
 
 	public {{ name }}_Base({{requiredArgList}}){
 		//initialize required properties from constructor
@@ -22,6 +27,7 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 
 	{{#props}}
 		{{^isFunction}}
+		{{^isElement}}
 			public {{ type }} get{{upperName}}(){
 				return getState().get{{upperName}}();
 			}
@@ -29,6 +35,19 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 			public void set{{upperName}}({{ type }} {{name}}){
 				getState().set{{upperName}}({{name}});
 			}
+		{{/isElement}}
+		{{#isElement}}
+			public ReactComponent {{ name }};
+			public ReactComponent get{{upperName}}(){
+				return {{name}};
+			}
+
+			public void set{{upperName}}(ReactComponent {{name}}){
+				this.{{name}} = {{name}};
+				getState().set{{upperName}}(new ReactComponent.ReactComponentStateWrapper({{name}}.getState()));
+				getState().set{{upperName}}ComponentType({{name}}.getComponentType());
+			}
+		{{/isElement}}
 		{{/isFunction}}
 	{{/props}}
 
@@ -56,10 +75,11 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 	{{/props}}
 
 	//Vaadin enforces the state to have an empty constructor
-	public static class {{name}}State extends JavaScriptComponentState{
+	public static class {{name}}State extends ReactComponent.ReactComponentState{
 		//Only fields which are not functions can be present on the state. Functions will be represented by the handlers
 		{{#props}}
 			{{^isFunction}}
+			{{^isElement}}
 				private {{ type }} {{ name }};
 
 				public {{ type }} get{{upperName}}(){
@@ -69,6 +89,27 @@ abstract public class {{ name }}_Base extends AbstractJavaScriptComponent{
 				public void set{{upperName}}({{ type }} {{name}}){
 					this.{{name}} = {{name}};
 				}
+			{{/isElement}}
+			{{#isElement}}
+				private ReactComponent.ReactComponentStateWrapper {{ name }};
+				private String {{ name }}ComponentType;
+
+				public ReactComponent.ReactComponentStateWrapper get{{upperName}}(){
+					return {{name}};
+				}
+
+				public void set{{upperName}}(ReactComponentStateWrapper {{name}}){
+					this.{{name}} = {{name}};
+				}
+
+				public String get{{upperName}}ComponentType(){
+					return {{name}}ComponentType;
+				}
+
+				public void set{{upperName}}ComponentType(String {{name}}ComponentType){
+					this.{{name}}ComponentType = {{name}}ComponentType;
+				}
+			{{/isElement}}
 			{{/isFunction}}
 		{{/props}}
 	}
