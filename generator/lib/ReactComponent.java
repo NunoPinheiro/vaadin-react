@@ -30,6 +30,26 @@ public abstract class ReactComponent extends AbstractJavaScriptComponent{
   **/
   public abstract String getComponentType();
 
+  //During react components composition we need to track the parent to allow updating the client-side state
+  private ReactComponent reactParent;
+
+	public ReactComponent getReactParent(){
+		return reactParent;
+	}
+
+	protected void setReactParent(ReactComponent reactParent){
+		this.reactParent = reactParent;
+	}
+
+ @Override
+ public void markAsDirty() {
+		if(getReactParent() != null){
+			getReactParent().markAsDirty();
+		}
+		else{
+			super.markAsDirty();
+		}
+	}
 
   /**
     Magic going on here to enable  inner components.

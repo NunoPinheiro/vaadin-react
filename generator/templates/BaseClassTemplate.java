@@ -7,6 +7,7 @@ import elemental.json.JsonArray;
 import com.nunopinheiro.vaadin_react.ReactComponent;
 
 abstract public class {{ name }}_Base extends ReactComponent{
+
 	@Override
 	public String getComponentType(){
 		return "{{name}}";
@@ -33,6 +34,9 @@ abstract public class {{ name }}_Base extends ReactComponent{
 			}
 
 			public void set{{upperName}}({{ type }} {{name}}){
+				if(getReactParent() != null){
+					getReactParent().markAsDirty();
+				}
 				getState().set{{upperName}}({{name}});
 			}
 		{{/isElement}}
@@ -43,7 +47,16 @@ abstract public class {{ name }}_Base extends ReactComponent{
 			}
 
 			public void set{{upperName}}(ReactComponent {{name}}){
+				if(getReactParent() != null){
+					getReactParent().markAsDirty();
+				}
+				if(this.{{name}} != null){
+					//Clean up react parent from former child
+					this.{{name}}.setReactParent(null);
+				}
 				this.{{name}} = {{name}};
+				//Add this component as react parent of the other component, enabling client refreshes on child changes
+				this.{{name}}.setReactParent(this);
 				getState().set{{upperName}}(new ReactComponent.ReactComponentStateWrapper({{name}}.getState()));
 				getState().set{{upperName}}ComponentType({{name}}.getComponentType());
 			}
