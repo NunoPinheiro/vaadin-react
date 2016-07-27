@@ -99,8 +99,12 @@ function processFile(file){
 
   //Copy the lib to the target folder - we are avoiding a maven distribution for now
   var libPackageFolder = "target/generated-sources/vaadin-react/com/nunopinheiro/vaadin_react";
+  var libResourcesPackageFolder = "target/classes/com/nunopinheiro/vaadin_react";
   mkdirs(libPackageFolder);
+  mkdirs(libResourcesPackageFolder);
   fs.createReadStream(__dirname + "/lib/ReactComponent.java", "utf8").pipe(fs.createWriteStream(libPackageFolder + "/ReactComponent.java"));
+  fs.createReadStream(__dirname + "/lib/VaadinComponentWrapper.java", "utf8").pipe(fs.createWriteStream(libPackageFolder + "/VaadinComponentWrapper.java"));
+  fs.createReadStream(__dirname + "/lib/vaadinComponentWrapper.js", "utf8").pipe(fs.createWriteStream(libResourcesPackageFolder + "/vaadinComponentWrapper.js"));
 }
 
 function getPackageAsPath(package){

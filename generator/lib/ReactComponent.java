@@ -13,11 +13,12 @@ import elemental.json.Json;
 import elemental.json.JsonObject;
 import com.vaadin.server.EncodeResult;
 import com.vaadin.ui.AbstractJavaScriptComponent;
+import com.vaadin.ui.HasComponents;
 
 /**
   This class is copied to the target folder to avoid distributing the project in maven.
 **/
-public abstract class ReactComponent extends AbstractJavaScriptComponent{
+public abstract class ReactComponent extends AbstractJavaScriptComponent implements HasComponents{
 
   //Turn the method into public
   public ReactComponentState getState(){

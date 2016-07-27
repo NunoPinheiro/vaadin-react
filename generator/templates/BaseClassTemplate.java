@@ -43,6 +43,10 @@ abstract public class {{ name }}_Base extends ReactComponent{
 			}
 
 			public void set{{upperName}}(ReactComponent {{name}}){
+				if(this.{{name}} != null){
+					this.{{name}}.setParent(null);
+				}
+				{{name}}.setParent(this);
 				this.{{name}} = {{name}};
 				getState().set{{upperName}}(new ReactComponent.ReactComponentStateWrapper({{name}}.getState()));
 				getState().set{{upperName}}ComponentType({{name}}.getComponentType());
@@ -89,6 +93,7 @@ abstract public class {{ name }}_Base extends ReactComponent{
 				public void set{{upperName}}({{ type }} {{name}}){
 					this.{{name}} = {{name}};
 				}
+
 			{{/isElement}}
 			{{#isElement}}
 				private ReactComponent.ReactComponentStateWrapper {{ name }};
@@ -112,5 +117,17 @@ abstract public class {{ name }}_Base extends ReactComponent{
 			{{/isElement}}
 			{{/isFunction}}
 		{{/props}}
+	}
+
+	public java.util.Iterator<com.vaadin.ui.Component> iterator(){
+		java.util.LinkedList<com.vaadin.ui.Component> list = new java.util.LinkedList<com.vaadin.ui.Component>();
+		{{#props}}
+			{{#isElement}}
+				if(get{{upperName}}() != null){
+					list.add(get{{upperName}}());
+				}
+			{{/isElement}}
+		{{/props}}
+		return list.iterator();
 	}
 }

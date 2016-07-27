@@ -15,6 +15,7 @@ var connectorName = package + "_" + "{{name}}Impl";
 var renderFunction = "$vaadinReact{{name}}Render";
 
 window[connectorName] = function() {
+      console.log("here for " + this.getState().message);
       this.onStateChange = function() {
         var component = window[renderFunction](this.getState());
         ReactDOM.render(component, this.getElement());

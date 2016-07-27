@@ -34,8 +34,10 @@ public class MyUI extends UI {
 		final VerticalLayout layout = new VerticalLayout();
 		TestComponentImpl outerContainer = new TestComponentImpl("Outer");
 		TestComponentImpl innerContainer = new TestComponentImpl("Inner");
-
 		outerContainer.setElement(innerContainer);
+		Label component = new Label("nha");
+		component.setId("testy");
+		innerContainer.setElement(new VaadinComponentWrapper(component));
 		layout.addComponent(outerContainer);
 		layout.setMargin(true);
 		layout.setSpacing(true);
