@@ -8,7 +8,8 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -36,11 +37,35 @@ public class MyUI extends UI {
 		TestComponentImpl innerContainer = new TestComponentImpl("Inner");
 
 		outerContainer.setElement(innerContainer);
+		Button incOuter = new Button("Increment outer");
+		Button incinner = new Button("Increment inner");
+		incOuter.addClickListener(new IncClickListener(outerContainer, "outer"));
+		incinner.addClickListener(new IncClickListener(innerContainer, "inner"));
+		
 		layout.addComponent(outerContainer);
+		layout.addComponent(incOuter);
+		layout.addComponent(incinner);
 		layout.setMargin(true);
 		layout.setSpacing(true);
 
 		setContent(layout);
+	}
+	
+	class IncClickListener implements Button.ClickListener{
+		TestComponentImpl component;
+		String text;
+		int val = 0;
+		public IncClickListener(TestComponentImpl component, String text){
+			this.text = text;
+			this.component = component;
+			component.setMessage(text + " " +  val);
+		}
+		
+		@Override
+		public void buttonClick(ClickEvent event) {
+			component.setMessage(text + " " +  ++val);
+		}
+		
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
