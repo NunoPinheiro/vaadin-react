@@ -1,18 +1,16 @@
 {
   "name": "vaadin-react",
   "dependencies": {
-    "mustache": "^2.2.1",
-    "react-docgen": "",
-    "browserify": ""
+    "browserify": "",
+    "mustache": "^2.2.1"
   },
   "scripts": {
     "compile": "babel src/main/node --out-dir src/main/node;"
   },
-  "version" : "0.0.2",
-  "bin" : "generator/generator.js",
-  "repository" :{
-    "type" : "git",
-    "url" : "https://github.com/NunoPinheiro/vaadin-react"
+  "version": "0.0.2",
+  "bin": "generator/generator.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NunoPinheiro/vaadin-react"
   }
-
 }

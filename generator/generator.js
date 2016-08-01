@@ -7,7 +7,7 @@ var baseClassTemplate = fs.readFileSync(__dirname + "/templates/BaseClassTemplat
 var defaultImplClassTemplate = fs.readFileSync(__dirname + "/templates/DefaultImplementationClassTemplate.java", "utf8")
 var connectorTemplate = fs.readFileSync(__dirname + "/templates/Connector.js", "utf8")
 var Mustache = require("mustache");
-
+require("./reactReflectiveProptypes")
 function listFiles(path){
   var stat = fs.statSync(path)
   if(stat.isDirectory()){
@@ -37,29 +37,39 @@ for(var file in files){
   processFile(filePath)
 }
 
+function readComponentName(file){
+  var splitted = file.split("/");
+  var componentWithExtension = splitted[splitted.length - 1]
+  return componentWithExtension.split(".")[0]
+}
 function processFile(file){
 
   var src = fs.readFileSync(file)
-  var componentInfo = reactDocs.parse(src);
-  var componentName = componentInfo.displayName || getComponentName(file);
+  var componentModule = require(process.cwd()  + "/" + file)
+  var componentName = readComponentName(file)
+  //Read component from its module. The component will be the module itself if exported as default
+  var component = componentModule[componentName] || componentModule
+
   var processedProps = []
   var requiredProps = []
   var requiredArgList = ""
   var requiredArgListCall = ""
 
-  for(var prop in componentInfo.props){
-    var upperName = prop[0].toUpperCase() + prop.substring(1)
-    var processedProp = { name : prop, upperName : upperName}
-    addJavaType(processedProp, componentInfo.props[prop].type.name)
+  for(var propName in component.propTypes){
+    var prop = component.propTypes[propName]
+    var upperName = propName[0].toUpperCase() + propName.substring(1)
+    var processedProp = { name : propName, upperName : upperName}
+    addJavaType(processedProp, prop.type)
     processedProps.push(processedProp)
-    if(componentInfo.props[prop].required){
+
+    if(prop.required){
       //Create arguments string for the constructor, we are doing it here because it would be uglier in mustache
       if(requiredArgList != ""){
         requiredArgList += ", ";
         requiredArgListCall += ", ";
       }
-      requiredArgList += `${processedProp.type} ${prop}`
-      requiredArgListCall += `${prop}`
+      requiredArgList += `${processedProp.type} ${prop.name}`
+      requiredArgListCall += `${prop.name}`
       requiredProps.push(processedProp)
     }
   }
@@ -109,13 +119,6 @@ function getPackageAsPath(package){
     package = package.replace(".", "/");
   }
   return package;
-}
-
-function getComponentName(file){
-  var nameInit = file.lastIndexOf("/") + 1
-  file = file.substring(nameInit)
-  var fileTypeIndex = file.indexOf(".js")
-  return file.substring(0, fileTypeIndex)
 }
 
 function addJavaType(properties, type){
