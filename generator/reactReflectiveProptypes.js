@@ -6,8 +6,6 @@ var React = require(process.cwd() + "/node_modules/react");
 var originalPropTypes = React.PropTypes;
 var newPropTypes = {}
 
-var simplePropTypes = ['array', 'bool', 'func', 'number', 'object', 'string', 'symbol', 'any'];
-
 for(var propType in originalPropTypes){
   // Create a new reflective property each time the getter is called
   Object.defineProperty(newPropTypes, propType,
@@ -27,7 +25,6 @@ function reflectiveGetter(propType){
 }
 
 function createReflectivePropType(type){
-  var isSimpleProperty = simplePropTypes.indexOf(type) > -1;
   var fakePropType = null;
   //Used for propTypes with arguments
   fakePropType = function fakePropType(propTypes){
